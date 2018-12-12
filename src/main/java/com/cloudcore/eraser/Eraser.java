@@ -9,10 +9,12 @@ import java.nio.file.Paths;
 
 public class Eraser {
 
-    public static void Erase(String account) {
+    public static void erase(String account) {
         // "default" is currently "DefaultUser".
         if (account.equals("default"))
             account = "DefaultUser";
+
+        System.out.println("Erasing " + account);
 
         // Delete all program-level Logs.
         delete(new File(FileSystem.LogsFolder));
@@ -24,6 +26,9 @@ public class Eraser {
         delete(new File(FileSystem.AccountsFolder + account + FileSystem.ReceiptsPath));
         // Delete all commands.
         delete(new File(FileSystem.CommandsFolder));
+
+        FileSystem.createDirectories();
+        FileSystem.createAccountDirectories(account);
     }
 
     private static void delete(File file) {

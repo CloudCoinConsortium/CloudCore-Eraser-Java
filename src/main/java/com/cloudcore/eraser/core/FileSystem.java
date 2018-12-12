@@ -58,16 +58,14 @@ public class FileSystem {
 
     public static boolean createAccountDirectories(String account) {
         try {
-            Files.createDirectories(Paths.get(RootPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + DetectedPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + ImportPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + SuspectPath));
 
-            Files.createDirectories(Paths.get(RootPath + account + DetectedPath));
-            Files.createDirectories(Paths.get(RootPath + account + ImportPath));
-            Files.createDirectories(Paths.get(RootPath + account + SuspectPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + BankPath));
 
-            Files.createDirectories(Paths.get(RootPath + account + BankPath));
-
-            Files.createDirectories(Paths.get(RootPath + account + LogsPath));
-            Files.createDirectories(Paths.get(RootPath + account + ReceiptsPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + LogsPath));
+            Files.createDirectories(Paths.get(AccountsFolder + account + ReceiptsPath));
         } catch (Exception e) {
             System.out.println("FS#CD: " + e.getLocalizedMessage());
             e.printStackTrace();

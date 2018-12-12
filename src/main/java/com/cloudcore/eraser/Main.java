@@ -17,13 +17,11 @@ public class Main {
             FolderWatcher watcher = new FolderWatcher(FileSystem.CommandsFolder);
             boolean stop = false;
 
-            Eraser.Erase("DefaultUser");
-
             commands = FileSystem.getCommands();
             if (commands.size() > 0)
                 for (Command command : commands) {
                     FileSystem.createAccountDirectories(command.account);
-
+                    Eraser.erase(command.account);
                     FileSystem.archiveCommand(command);
                 }
 
@@ -35,7 +33,7 @@ public class Main {
                     if (commands.size() > 0)
                         for (Command command : commands) {
                             FileSystem.createAccountDirectories(command.account);
-
+                            Eraser.erase(command.account);
                             FileSystem.archiveCommand(command);
                         }
                 }

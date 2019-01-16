@@ -22,6 +22,7 @@ public class Config  {
 
     public static final String TAG_ACCOUNTS = "accounts";
     public static final String TAG_COMMAND = "Command";
+    public static final String TAG_COMMANDHISTORY = "CommandHistory";
     public static final String TAG_LOGS = "Logs";
     public static final String TAG_RECEIPTS = "Receipts";
 

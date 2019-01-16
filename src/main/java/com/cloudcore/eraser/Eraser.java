@@ -4,15 +4,13 @@ import com.cloudcore.eraser.core.FileSystem;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Eraser {
 
     public static void erase(String account) {
         // "default" is currently "DefaultUser".
-        if (account.equals("default"))
-            account = "DefaultUser";
+        if (account == null || account.equals("default"))
+            account = "";
 
         System.out.println("Erasing " + account);
 
@@ -20,15 +18,17 @@ public class Eraser {
         delete(new File(FileSystem.LogsFolder));
         // Delete all program-level Receipts.
         delete(new File(FileSystem.ReceiptsFolder));
-        // Delete all account-level Logs.
-        delete(new File(FileSystem.AccountsFolder + account + FileSystem.LogsPath));
-        // Delete all account-level Receipts.
-        delete(new File(FileSystem.AccountsFolder + account + FileSystem.ReceiptsPath));
+        // Delete all program-level Logs.
+        delete(new File(FileSystem.ProgramFolder + FileSystem.LogsPath));
+        // Delete all program-level Receipts.
+        delete(new File(FileSystem.ProgramFolder + FileSystem.ReceiptsPath));
         // Delete all commands.
-        delete(new File(FileSystem.CommandsFolder));
+        delete(new File(FileSystem.CommandFolder));
+        // Delete all command history.
+        delete(new File(FileSystem.CommandHistoryFolder));
 
         FileSystem.createDirectories();
-        FileSystem.createAccountDirectories(account);
+        //FileSystem.createAccountDirectories(account);
     }
 
     private static void delete(File file) {

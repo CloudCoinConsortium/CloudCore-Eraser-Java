@@ -12,43 +12,40 @@ public class Main {
 
     public static void main(String[] args) {
         SimpleLogger.writeLog("ServantEraserStarted", "");
-        ArrayList<Command> commands;
-        try {
-            if (args.length != 0 && Files.exists(Paths.get(args[0]))) {
-                System.out.println("New root path: " + args[0]);
-                FileSystem.changeRootPath(args[0]);
+        if (args.length != 0 && Files.exists(Paths.get(args[0]))) {
+            System.out.println("New root path: " + args[0]);
+            FileSystem.changeRootPath(args[0]);
+        }
+
+        FileSystem.createDirectories();
+
+        FolderWatcher watcher = new FolderWatcher(FileSystem.CommandFolder);
+
+        ArrayList<Command> commands = FileSystem.getCommands();
+        if (commands.size() > 0)
+            for (Command command : commands) {
+                Eraser.erase(command.account);
+                FileSystem.archiveCommand(command);
             }
 
-            FileSystem.createDirectories();
+        System.out.println("Watching folders at " + FileSystem.CommandFolder + "...");
 
-            FolderWatcher watcher = new FolderWatcher(FileSystem.CommandFolder);
-            boolean stop = false;
+        while (true) {
+            try {
+                Thread.sleep(1000);
 
-            commands = FileSystem.getCommands();
-            if (commands.size() > 0)
-                for (Command command : commands) {
-                    //FileSystem.createAccountDirectories(command.account);
-                    Eraser.erase(command.account);
-                    FileSystem.archiveCommand(command);
-                }
-
-            System.out.println("Watching folders at " + FileSystem.CommandFolder + "...");
-
-            while (!stop) {
                 if (watcher.newFileDetected()) {
                     commands = FileSystem.getCommands();
                     if (commands.size() > 0)
                         for (Command command : commands) {
-                            //FileSystem.createAccountDirectories(command.account);
                             Eraser.erase(command.account);
                             FileSystem.archiveCommand(command);
                         }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Uncaught exception - " + e.getLocalizedMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Uncaught exception - " + e.getLocalizedMessage());
         }
-
     }
 }

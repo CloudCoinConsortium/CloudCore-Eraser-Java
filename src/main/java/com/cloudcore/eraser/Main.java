@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         SimpleLogger.writeLog("ServantEraserStarted", "");
+        singleRun = isSingleRun(args);
         if (args.length != 0 && Files.exists(Paths.get(args[0]))) {
             System.out.println("New root path: " + args[0]);
             FileSystem.changeRootPath(args[0]);
@@ -26,6 +27,7 @@ public class Main {
             for (Command command : commands) {
                 Eraser.erase(command.account);
                 FileSystem.archiveCommand(command);
+                exitIfSingleRun();
             }
 
         System.out.println("Watching folders at " + FileSystem.CommandFolder + "...");
@@ -40,6 +42,7 @@ public class Main {
                         for (Command command : commands) {
                             Eraser.erase(command.account);
                             FileSystem.archiveCommand(command);
+                            exitIfSingleRun();
                         }
                 }
             } catch (Exception e) {
@@ -47,5 +50,17 @@ public class Main {
                 System.out.println("Uncaught exception - " + e.getLocalizedMessage());
             }
         }
+    }
+
+    public static boolean singleRun = false;
+    public static boolean isSingleRun(String[] args) {
+        for (String arg : args)
+            if (arg.equals("singleRun"))
+                return true;
+        return false;
+    }
+    public static void exitIfSingleRun() {
+        if (singleRun)
+            System.exit(0);
     }
 }

@@ -20,7 +20,7 @@ public class Config  {
 
     public static final String TAG_BANK = "Bank";
 
-    public static final String TAG_ACCOUNTS = "accounts";
+    public static final String TAG_ACCOUNTS = "Accounts";
     public static final String TAG_COMMAND = "Command";
     public static final String TAG_COMMANDHISTORY = "CommandHistory";
     public static final String TAG_LOGS = "Logs";

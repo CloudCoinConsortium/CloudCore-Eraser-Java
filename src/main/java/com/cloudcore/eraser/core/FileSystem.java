@@ -44,14 +44,14 @@ public class FileSystem {
         try {
             Files.createDirectories(Paths.get(RootPath));
 
-            Files.createDirectories(Paths.get(ProgramFolder));
+            Files.createDirectories(Paths.get(AccountFolder));
             Files.createDirectories(Paths.get(CommandFolder));
             Files.createDirectories(Paths.get(CommandHistoryFolder));
             Files.createDirectories(Paths.get(LogsFolder));
             Files.createDirectories(Paths.get(ReceiptsFolder));
 
-            Files.createDirectories(Paths.get(FileSystem.ProgramFolder + FileSystem.LogsPath));
-            Files.createDirectories(Paths.get(FileSystem.ProgramFolder + FileSystem.ReceiptsPath));
+            Files.createDirectories(Paths.get(FileSystem.AccountFolder + FileSystem.LogsPath));
+            Files.createDirectories(Paths.get(FileSystem.AccountFolder + FileSystem.ReceiptsPath));
         } catch (Exception e) {
             System.out.println("FS#CD: " + e.getLocalizedMessage());
             e.printStackTrace();
@@ -62,25 +62,38 @@ public class FileSystem {
     }
 
     public static void changeRootPath(String rootPath) {
-        RootPath = rootPath;
-        ProgramFolder = rootPath.substring(0, rootPath.indexOf("Accounts"));
+        try {
+            int index = rootPath.indexOf(Config.TAG_ACCOUNTS);
+        if (index == -1) {
+            RootPath = rootPath;
+            if (!rootPath.endsWith(File.separator)) rootPath += File.separator;
+            AccountFolder = rootPath + Config.TAG_ACCOUNTS + File.separator;
+            Files.createDirectories(Paths.get(AccountFolder));
+        }
+        else {
+            AccountFolder = rootPath;
+            RootPath = rootPath.substring(0, index);
+        }
 
         CommandFolder = RootPath + Config.TAG_COMMAND + File.separator;
         CommandHistoryFolder = RootPath + Config.TAG_COMMANDHISTORY + File.separator;
         LogsFolder = RootPath + Config.TAG_LOGS + File.separator;
         ReceiptsFolder = RootPath + Config.TAG_RECEIPTS + File.separator;
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     public static boolean createAccountDirectories(String account) {
         try {
-            Files.createDirectories(Paths.get(ProgramFolder + account + DetectedPath));
-            Files.createDirectories(Paths.get(ProgramFolder + account + ImportPath));
-            Files.createDirectories(Paths.get(ProgramFolder + account + SuspectPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + DetectedPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + ImportPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + SuspectPath));
 
-            Files.createDirectories(Paths.get(ProgramFolder + account + BankPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + BankPath));
 
-            Files.createDirectories(Paths.get(ProgramFolder + account + LogsPath));
-            Files.createDirectories(Paths.get(ProgramFolder + account + ReceiptsPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + LogsPath));
+            Files.createDirectories(Paths.get(AccountFolder + account + ReceiptsPath));
         } catch (Exception e) {
             System.out.println("FS#CD: " + e.getLocalizedMessage());
             e.printStackTrace();
@@ -121,14 +134,14 @@ public class FileSystem {
     }
 
     public static void moveFromImportToSuspectFolder(String account) {
-        for (CloudCoin coin : loadFolderCoins(ProgramFolder + account + ImportPath)) {
+        for (CloudCoin coin : loadFolderCoins(AccountFolder + account + ImportPath)) {
             String fileName = CoinUtils.generateFilename(coin);
 
             Stack stack = new Stack(coin);
             try {
-                Files.write(Paths.get(ProgramFolder + account + SuspectPath + fileName + ".stack"),
+                Files.write(Paths.get(AccountFolder + account + SuspectPath + fileName + ".stack"),
                         Utils.createGson().toJson(stack).getBytes(StandardCharsets.UTF_8));
-                Files.deleteIfExists(Paths.get(ProgramFolder + account + ImportPath + coin.currentFilename));
+                Files.deleteIfExists(Paths.get(AccountFolder + account + ImportPath + coin.currentFilename));
             } catch (IOException e) {
                 System.out.println("FS#DPP: " + e.getLocalizedMessage());
                 e.printStackTrace();

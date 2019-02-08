@@ -1,6 +1,7 @@
 package com.cloudcore.eraser;
 
 import com.cloudcore.eraser.core.FileSystem;
+import com.cloudcore.eraser.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +20,9 @@ public class Eraser {
         // Delete all program-level Receipts.
         delete(new File(FileSystem.ReceiptsFolder));
         // Delete all program-level Logs.
-        delete(new File(FileSystem.ProgramFolder + FileSystem.LogsPath));
+        delete(new File(FileSystem.AccountFolder + FileSystem.LogsPath));
         // Delete all program-level Receipts.
-        delete(new File(FileSystem.ProgramFolder + FileSystem.ReceiptsPath));
+        delete(new File(FileSystem.AccountFolder + FileSystem.ReceiptsPath));
         // Delete all commands.
         delete(new File(FileSystem.CommandFolder));
         // Delete all command history.

@@ -21,7 +21,7 @@ public class FileSystem {
     /* Fields */
 
     public static String RootPath = "C:\\Users\\Public\\Documents\\CloudCoin\\Accounts\\DefaultUser\\";
-    public static String ProgramFolder = "C:\\Users\\Public\\Documents\\CloudCoin\\";
+    public static String AccountFolder = "C:\\Users\\Public\\Documents\\CloudCoin\\";
 
     public static String DetectedPath = File.separator + Config.TAG_DETECTED + File.separator;
     public static String ImportPath = File.separator + Config.TAG_IMPORT + File.separator;
